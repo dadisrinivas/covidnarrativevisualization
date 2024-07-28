@@ -57,12 +57,11 @@ document.addEventListener("DOMContentLoaded", function() {
         svg.html(""); // Clear previous content
         console.log('Creating Scene 1: US Map');
 
-        const path = d3.geoPath();
         const projection = d3.geoAlbersUsa()
             .scale(1280)
             .translate([480, 300]);
 
-        path.projection(projection);
+        const path = d3.geoPath().projection(projection);
 
         const us = parameters.usMapData;
         const timeSeriesConfirmed = parameters.timeSeriesConfirmed;
