@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", function() {
-	console.log('Checking!!!');
     const scenes = [createScene1, createScene2, createScene3];
     let currentSceneIndex = 0;
 
@@ -22,6 +21,7 @@ document.addEventListener("DOMContentLoaded", function() {
         d3.csv("data/time_series_covid19_deaths_US.csv"),
         d3.json("https://d3js.org/us-10m.v1.json")
     ]).then(function([timeSeriesConfirmed, timeSeriesDeaths, usMapData]) {
+        console.log('Datasets loaded successfully.');
         parameters.timeSeriesConfirmed = timeSeriesConfirmed;
         parameters.timeSeriesDeaths = timeSeriesDeaths;
         parameters.usMapData = usMapData;
@@ -51,6 +51,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function createScene1() {
         svg.html(""); // Clear previous content
+        console.log('Creating Scene 1: US Map');
 
         const path = d3.geoPath();
         const projection = d3.geoAlbersUsa()
@@ -64,6 +65,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // Aggregate data by state
         const stateCases = d3.rollup(timeSeriesConfirmed, v => d3.sum(v, d => +d[Object.keys(d)[Object.keys(d).length - 1]]), d => d.Province_State);
+
+        // Log the aggregated data
+        console.log('State Cases:', stateCases);
 
         // Draw map
         svg.append("g")
@@ -99,6 +103,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function createScene2() {
         svg.html(""); // Clear previous content
+        console.log('Creating Scene 2: State Overview');
 
         const timeSeriesConfirmed = parameters.timeSeriesConfirmed;
         const timeSeriesDeaths = parameters.timeSeriesDeaths;
@@ -115,6 +120,9 @@ document.addEventListener("DOMContentLoaded", function() {
             { metric: "Deaths", value: deaths },
             { metric: "Recovered", value: recovered }
         ];
+
+        // Log the data for debugging
+        console.log('State Data:', data);
 
         // Set up margins and dimensions
         const margin = { top: 20, right: 20, bottom: 100, left: 60 };
@@ -189,6 +197,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function createScene3() {
         svg.html(""); // Clear previous content
+        console.log('Creating Scene 3: Metric Trends');
 
         const timeSeriesData = parameters.selectedMetric === "Cases" ? parameters.timeSeriesConfirmed : parameters.timeSeriesDeaths;
         const stateData = timeSeriesData.filter(d => d.Province_State === parameters.selectedState);
@@ -200,6 +209,9 @@ document.addEventListener("DOMContentLoaded", function() {
             date: new Date(date),
             value: values[i]
         }));
+
+        // Log the data for debugging
+        console.log('Trends Data:', data);
 
         // Set up margins and dimensions
         const margin = { top: 20, right: 20, bottom: 100, left: 60 };
