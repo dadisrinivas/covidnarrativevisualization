@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", function() {
-	console.log('effort 1');
     const scenes = [createScene1, createScene2, createScene3];
     let currentSceneIndex = 0;
 
@@ -22,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function() {
         d3.csv("data/time_series_covid19_deaths_US.csv"),
         d3.json("https://d3js.org/us-10m.v1.json")
     ]).then(function([timeSeriesConfirmed, timeSeriesDeaths, usMapData]) {
-        console.log('Datasets loaded successfully. 1');
+        console.log('Datasets loaded successfully.');
         console.log('Confirmed Cases Data:', timeSeriesConfirmed);
         console.log('Deaths Data:', timeSeriesDeaths);
         console.log('US Map Data:', usMapData);
@@ -30,9 +29,6 @@ document.addEventListener("DOMContentLoaded", function() {
         parameters.timeSeriesConfirmed = timeSeriesConfirmed;
         parameters.timeSeriesDeaths = timeSeriesDeaths;
         parameters.usMapData = usMapData;
-
-        // Inspect the TopoJSON structure
-        console.log('Inspecting TopoJSON Structure:', usMapData);
 
         // Initialize the first scene
         scenes[0]();
@@ -97,7 +93,7 @@ document.addEventListener("DOMContentLoaded", function() {
             .attr("fill", d => {
                 const properties = d.properties; // Log the properties to inspect the structure
                 console.log('Properties:', properties);
-                const stateName = properties.name || properties.NAME || properties.StateName || properties.state_name; // Try different possible property names
+                const stateName = properties.NAME; // Update based on inspection results
                 console.log('State Name:', stateName);
                 const cases = stateCases.get(stateName) || 0;
                 console.log(`State: ${stateName}, Cases: ${cases}`);
@@ -105,7 +101,7 @@ document.addEventListener("DOMContentLoaded", function() {
             })
             .attr("stroke", "#fff")
             .on("click", function(event, d) {
-                parameters.selectedState = d.properties.name;
+                parameters.selectedState = d.properties.NAME; // Update based on inspection results
                 currentSceneIndex++;
                 parameters.currentScene = currentSceneIndex;
                 scenes[currentSceneIndex]();
