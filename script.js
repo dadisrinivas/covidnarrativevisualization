@@ -39,15 +39,15 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
 
-        // Update button states
-        function updateButtons() {
-            d3.select("#back").attr("disabled", currentSceneIndex === 0 ? "true" : null);
-        }
-
+        // Update button states initially
         updateButtons();
     }).catch(function(error) {
         console.error('Error loading or parsing data:', error);
     });
+
+    function updateButtons() {
+        d3.select("#back").attr("disabled", currentSceneIndex === 0 ? "true" : null);
+    }
 
     function createScene1() {
         svg.html(""); // Clear previous content
