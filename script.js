@@ -12,8 +12,8 @@ document.addEventListener("DOMContentLoaded", function() {
     };
 
     const svg = d3.select("#visualization").append("svg")
-        .attr("width", "100%")
-        .attr("height", "600px");
+        .attr("width", 960)
+        .attr("height", 600);
 
     // Load datasets
     Promise.all([
@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const path = d3.geoPath();
         const projection = d3.geoAlbersUsa()
             .scale(1280)
-            .translate([400, 300]);
+            .translate([480, 300]);
 
         path.projection(projection);
 
@@ -107,8 +107,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // Add title
         svg.append("text")
-            .attr("x", 400)
-            .attr("y", 50)
+            .attr("x", 480)
+            .attr("y", 20)
             .attr("text-anchor", "middle")
             .style("font-size", "20px")
             .text("COVID-19 Cases by State");
