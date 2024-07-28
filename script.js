@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function() {
         d3.csv("data/time_series_covid19_deaths_US.csv"),
         d3.json("https://d3js.org/us-10m.v1.json")
     ]).then(function([timeSeriesConfirmed, timeSeriesDeaths, usMapData]) {
-        console.log('Datasets loaded successfully.');
+        console.log('Datasets loaded successfully. 1');
         console.log('Confirmed Cases Data:', timeSeriesConfirmed);
         console.log('Deaths Data:', timeSeriesDeaths);
         console.log('US Map Data:', usMapData);
