@@ -83,15 +83,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
         svg.append("g")
             .attr("class", "states")
+            .attr("transform", "translate(60, 20)") // Center-align the map
             .selectAll("path")
             .data(states)
             .enter().append("path")
             .attr("d", path)
-            .attr("fill", d => {
-                const stateName = d.properties.name || d.properties.NAME || d.properties.StateName || d.properties.state_name;
-                const cases = stateCases.get(stateName) || 0;
-                return d3.interpolateReds(cases / 100000);
-            })
+            .attr("fill", "#87CEEB") // Light blue color for states
             .attr("stroke", "#fff")
             .on("click", function(event, d) {
                 parameters.selectedState = d.properties.name || d.properties.NAME || d.properties.StateName || d.properties.state_name;
@@ -106,7 +103,7 @@ document.addEventListener("DOMContentLoaded", function() {
         // Add title
         svg.append("text")
             .attr("x", 480)
-            .attr("y", 20)
+            .attr("y", 40) // Adjust title position to avoid getting cut
             .attr("text-anchor", "middle")
             .style("font-size", "20px")
             .text("COVID-19 Cases by State");
@@ -140,7 +137,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const width = 800 - margin.left - margin.right;
         const height = 600 - margin.top - margin.bottom;
 
-        const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+        const g = svg.append("g").attr("transform", `translate(${(svg.attr("width") - width) / 2},${margin.top})`);
 
         const x = d3.scaleBand().rangeRound([0, width]).padding(0.1);
         const y = d3.scaleLinear().rangeRound([height, 0]);
@@ -184,22 +181,22 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // Add title
         svg.append("text")
-            .attr("x", (width / 2))             
-            .attr("y", margin.top / 2)
-            .attr("text-anchor", "middle")  
-            .style("font-size", "20px") 
+            .attr("x", (svg.attr("width") / 2))
+            .attr("y", margin.top + 10)
+            .attr("text-anchor", "middle")
+            .style("font-size", "20px")
             .text(`COVID-19 ${parameters.selectedState} Overview`);
 
         // Add x-axis label
         svg.append("text")
-            .attr("transform", `translate(${width / 2}, ${height + margin.top + 40})`)
+            .attr("transform", `translate(${(svg.attr("width") - width) / 2 + width / 2}, ${height + margin.top + 80})`)
             .style("text-anchor", "middle")
             .text("Metric");
 
         // Add y-axis label
         svg.append("text")
             .attr("transform", "rotate(-90)")
-            .attr("y", 0 - margin.left)
+            .attr("y", margin.left - 90)
             .attr("x", 0 - (height / 2))
             .attr("dy", "1em")
             .style("text-anchor", "middle")
@@ -229,7 +226,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const width = 800 - margin.left - margin.right;
         const height = 600 - margin.top - margin.bottom;
 
-        const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+        const g = svg.append("g").attr("transform", `translate(${(svg.attr("width") - width) / 2},${margin.top})`);
 
         const x = d3.scaleTime().rangeRound([0, width]);
         const y = d3.scaleLinear().rangeRound([height, 0]);
@@ -273,22 +270,22 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // Add title
         svg.append("text")
-            .attr("x", (width / 2))             
-            .attr("y", margin.top / 2)
-            .attr("text-anchor", "middle")  
-            .style("font-size", "20px") 
+            .attr("x", (svg.attr("width") / 2))
+            .attr("y", margin.top + 10)
+            .attr("text-anchor", "middle")
+            .style("font-size", "20px")
             .text(`COVID-19 ${parameters.selectedState} ${parameters.selectedMetric} Trends`);
 
         // Add x-axis label
         svg.append("text")
-            .attr("transform", `translate(${width / 2}, ${height + margin.top + 40})`)
+            .attr("transform", `translate(${(svg.attr("width") - width) / 2 + width / 2}, ${height + margin.top + 80})`)
             .style("text-anchor", "middle")
             .text("Date");
 
         // Add y-axis label
         svg.append("text")
             .attr("transform", "rotate(-90)")
-            .attr("y", 0 - margin.left)
+            .attr("y", margin.left - 90)
             .attr("x", 0 - (height / 2))
             .attr("dy", "1em")
             .style("text-anchor", "middle")
