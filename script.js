@@ -30,6 +30,9 @@ document.addEventListener("DOMContentLoaded", function() {
         parameters.timeSeriesDeaths = timeSeriesDeaths;
         parameters.usMapData = usMapData;
 
+        // Inspect the TopoJSON structure
+        console.log('Inspecting TopoJSON Structure:', usMapData);
+
         // Initialize the first scene
         scenes[0]();
 
@@ -81,6 +84,9 @@ document.addEventListener("DOMContentLoaded", function() {
         const states = topojson.feature(us, us.objects.states).features;
         console.log('States:', states);
 
+        // Log the structure of the first state feature
+        console.log('First State Feature:', states[0]);
+
         svg.append("g")
             .attr("class", "states")
             .selectAll("path")
@@ -88,8 +94,9 @@ document.addEventListener("DOMContentLoaded", function() {
             .enter().append("path")
             .attr("d", path)
             .attr("fill", d => {
-                const stateName = d.properties.name; // Update this line based on inspected properties
-                console.log('Properties:', d.properties); // Log the properties to inspect the structure
+                const properties = d.properties; // Log the properties to inspect the structure
+                console.log('Properties:', properties);
+                const stateName = properties.name || properties.NAME || properties.StateName || properties.state_name; // Try different possible property names
                 console.log('State Name:', stateName);
                 const cases = stateCases.get(stateName) || 0;
                 console.log(`State: ${stateName}, Cases: ${cases}`);
