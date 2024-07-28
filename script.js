@@ -79,15 +79,19 @@ document.addEventListener("DOMContentLoaded", function() {
         console.log('State Cases:', stateCases);
 
         // Draw map
+        const states = topojson.feature(us, us.objects.states).features;
+        console.log('States:', states);
+
         svg.append("g")
             .attr("class", "states")
             .selectAll("path")
-            .data(topojson.feature(us, us.objects.states).features)
+            .data(states)
             .enter().append("path")
             .attr("d", path)
             .attr("fill", d => {
                 const stateName = d.properties.name;
                 const cases = stateCases.get(stateName) || 0;
+                console.log(`State: ${stateName}, Cases: ${cases}`);
                 return d3.interpolateReds(cases / 100000);
             })
             .attr("stroke", "#fff")
