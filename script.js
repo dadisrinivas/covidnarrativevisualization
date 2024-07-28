@@ -74,6 +74,16 @@ document.addEventListener("DOMContentLoaded", function() {
         // Aggregate data by state
         const stateCases = d3.rollup(timeSeriesConfirmed, v => d3.sum(v, d => +d[Object.keys(d)[Object.keys(d).length - 1]]), d => d.Province_State);
 
+        // Find the state with the highest number of cases
+        let maxCasesState = "";
+        let maxCases = 0;
+        stateCases.forEach((cases, state) => {
+            if (cases > maxCases) {
+                maxCases = cases;
+                maxCasesState = state;
+            }
+        });
+
         // Log the aggregated data
         console.log('State Cases:', stateCases);
 
@@ -88,7 +98,11 @@ document.addEventListener("DOMContentLoaded", function() {
             .data(states)
             .enter().append("path")
             .attr("d", path)
-            .attr("fill", "#87CEEB") // Light blue color for states
+            .attr("fill", d => {
+                const stateName = d.properties.name || d.properties.NAME || d.properties.StateName || d.properties.state_name;
+                const cases = stateCases.get(stateName) || 0;
+                return d3.interpolateReds(cases / 100000);
+            })
             .attr("stroke", "#fff")
             .on("click", function(event, d) {
                 parameters.selectedState = d.properties.name || d.properties.NAME || d.properties.StateName || d.properties.state_name;
@@ -107,6 +121,18 @@ document.addEventListener("DOMContentLoaded", function() {
             .attr("text-anchor", "middle")
             .style("font-size", "20px")
             .text("COVID-19 Cases by State");
+
+        // Add annotation for the state with the highest cases
+        const maxStateFeature = states.find(d => (d.properties.name || d.properties.NAME || d.properties.StateName || d.properties.state_name) === maxCasesState);
+        if (maxStateFeature) {
+            svg.append("text")
+                .attr("x", path.centroid(maxStateFeature)[0] + 60)
+                .attr("y", path.centroid(maxStateFeature)[1] + 20)
+                .attr("text-anchor", "middle")
+                .style("font-size", "12px")
+                .style("fill", "black")
+                .text(`Highest cases: ${maxCasesState} (${maxCases})`);
+        }
     }
 
     function createScene2() {
@@ -168,7 +194,7 @@ document.addEventListener("DOMContentLoaded", function() {
             .attr("y", d => y(d.value))
             .attr("width", x.bandwidth())
             .attr("height", d => height - y(d.value))
-            .attr("fill", "steelblue")
+            .attr("fill", "darkblue")
             .on("click", function(event, d) {
                 parameters.selectedMetric = d.metric;
                 currentSceneIndex++;
@@ -201,6 +227,16 @@ document.addEventListener("DOMContentLoaded", function() {
             .attr("dy", "1em")
             .style("text-anchor", "middle")
             .text("Count");
+
+        // Add annotation for the highest value
+        const maxValueData = data.reduce((max, d) => d.value > max.value ? d : max, data[0]);
+        svg.append("text")
+            .attr("x", (svg.attr("width") / 2))
+            .attr("y", margin.top + 40)
+            .attr("text-anchor", "middle")
+            .style("font-size", "12px")
+            .style("fill", "black")
+            .text(`Highest ${maxValueData.metric}: ${maxValueData.value}`);
     }
 
     function createScene3() {
@@ -290,5 +326,15 @@ document.addEventListener("DOMContentLoaded", function() {
             .attr("dy", "1em")
             .style("text-anchor", "middle")
             .text("Number of Cases");
+
+        // Add annotation for a significant point (e.g., peak value)
+        const maxValuePoint = data.reduce((max, d) => d.value > max.value ? d : max, data[0]);
+        svg.append("text")
+            .attr("x", x(maxValuePoint.date) + (svg.attr("width") - width) / 2)
+            .attr("y", y(maxValuePoint.value) + margin.top - 10)
+            .attr("text-anchor", "middle")
+            .style("font-size", "12px")
+            .style("fill", "black")
+            .text(`Peak: ${maxValuePoint.value} on ${maxValuePoint.date.toDateString()}`);
     }
 });
