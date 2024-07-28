@@ -22,6 +22,10 @@ document.addEventListener("DOMContentLoaded", function() {
         d3.json("https://d3js.org/us-10m.v1.json")
     ]).then(function([timeSeriesConfirmed, timeSeriesDeaths, usMapData]) {
         console.log('Datasets loaded successfully.');
+        console.log('Confirmed Cases Data:', timeSeriesConfirmed);
+        console.log('Deaths Data:', timeSeriesDeaths);
+        console.log('US Map Data:', usMapData);
+
         parameters.timeSeriesConfirmed = timeSeriesConfirmed;
         parameters.timeSeriesDeaths = timeSeriesDeaths;
         parameters.usMapData = usMapData;
@@ -62,6 +66,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
         const us = parameters.usMapData;
         const timeSeriesConfirmed = parameters.timeSeriesConfirmed;
+
+        if (!us || !timeSeriesConfirmed) {
+            console.error('US map data or confirmed cases data is missing.');
+            return;
+        }
 
         // Aggregate data by state
         const stateCases = d3.rollup(timeSeriesConfirmed, v => d3.sum(v, d => +d[Object.keys(d)[Object.keys(d).length - 1]]), d => d.Province_State);
