@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function() {
     Promise.all([
         d3.csv("data/time_series_covid19_confirmed_US.csv"),
         d3.csv("data/time_series_covid19_deaths_US.csv"),
-        d3.json("https://d3js.org/us-10m.v1.json")
+        d3.json("https://unpkg.com/us-atlas/states-10m.json")
     ]).then(function([timeSeriesConfirmed, timeSeriesDeaths, usMapData]) {
         console.log('Datasets loaded successfully.');
         console.log('Confirmed Cases Data:', timeSeriesConfirmed);
@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", function() {
             .attr("fill", d => {
                 const properties = d.properties; // Log the properties to inspect the structure
                 console.log('Properties:', properties);
-                const stateName = properties.NAME; // Update based on inspection results
+                const stateName = properties.name || properties.NAME || properties.StateName || properties.state_name; // Try different possible property names
                 console.log('State Name:', stateName);
                 const cases = stateCases.get(stateName) || 0;
                 console.log(`State: ${stateName}, Cases: ${cases}`);
@@ -101,7 +101,7 @@ document.addEventListener("DOMContentLoaded", function() {
             })
             .attr("stroke", "#fff")
             .on("click", function(event, d) {
-                parameters.selectedState = d.properties.NAME; // Update based on inspection results
+                parameters.selectedState = d.properties.name;
                 currentSceneIndex++;
                 parameters.currentScene = currentSceneIndex;
                 scenes[currentSceneIndex]();
