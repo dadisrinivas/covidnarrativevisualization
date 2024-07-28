@@ -88,8 +88,8 @@ document.addEventListener("DOMContentLoaded", function() {
             .enter().append("path")
             .attr("d", path)
             .attr("fill", d => {
-                const stateName = d.properties.name;
-                console.log('Properties:', d.properties);
+                const stateName = d.properties.name; // Update this line based on inspected properties
+                console.log('Properties:', d.properties); // Log the properties to inspect the structure
                 console.log('State Name:', stateName);
                 const cases = stateCases.get(stateName) || 0;
                 console.log(`State: ${stateName}, Cases: ${cases}`);
