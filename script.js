@@ -89,6 +89,8 @@ document.addEventListener("DOMContentLoaded", function() {
             .attr("d", path)
             .attr("fill", d => {
                 const stateName = d.properties.name;
+                console.log('Properties:', d.properties);
+                console.log('State Name:', stateName);
                 const cases = stateCases.get(stateName) || 0;
                 console.log(`State: ${stateName}, Cases: ${cases}`);
                 return d3.interpolateReds(cases / 100000);
