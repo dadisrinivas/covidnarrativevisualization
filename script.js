@@ -81,9 +81,6 @@ document.addEventListener("DOMContentLoaded", function() {
         const states = topojson.feature(us, us.objects.states).features;
         console.log('States:', states);
 
-        // Log the structure of the first state feature
-        console.log('First State Feature:', states[0]);
-
         svg.append("g")
             .attr("class", "states")
             .selectAll("path")
@@ -91,17 +88,13 @@ document.addEventListener("DOMContentLoaded", function() {
             .enter().append("path")
             .attr("d", path)
             .attr("fill", d => {
-                const properties = d.properties; // Log the properties to inspect the structure
-                console.log('Properties:', properties);
-                const stateName = properties.name || properties.NAME || properties.StateName || properties.state_name; // Try different possible property names
-                console.log('State Name:', stateName);
+                const stateName = d.properties.name || d.properties.NAME || d.properties.StateName || d.properties.state_name;
                 const cases = stateCases.get(stateName) || 0;
-                console.log(`State: ${stateName}, Cases: ${cases}`);
                 return d3.interpolateReds(cases / 100000);
             })
             .attr("stroke", "#fff")
             .on("click", function(event, d) {
-                parameters.selectedState = d.properties.name;
+                parameters.selectedState = d.properties.name || d.properties.NAME || d.properties.StateName || d.properties.state_name;
                 currentSceneIndex++;
                 parameters.currentScene = currentSceneIndex;
                 scenes[currentSceneIndex]();
