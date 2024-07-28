@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const timeSeriesConfirmed = parameters.timeSeriesConfirmed;
 
         // Aggregate data by state
-        const stateCases = d3.rollup(timeSeriesConfirmed, v => d3.sum(v, d => +d[d3.keys(d)[d3.keys(d).length - 1]]), d => d.Province_State);
+        const stateCases = d3.rollup(timeSeriesConfirmed, v => d3.sum(v, d => +d[Object.keys(d)[Object.keys(d).length - 1]]), d => d.Province_State);
 
         // Draw map
         svg.append("g")
@@ -105,8 +105,8 @@ document.addEventListener("DOMContentLoaded", function() {
         const stateConfirmed = timeSeriesConfirmed.filter(d => d.Province_State === parameters.selectedState);
         const stateDeaths = timeSeriesDeaths.filter(d => d.Province_State === parameters.selectedState);
 
-        const confirmedCases = d3.sum(stateConfirmed, d => +d[d3.keys(d)[d3.keys(d).length - 1]]);
-        const deaths = d3.sum(stateDeaths, d => +d[d3.keys(d)[d3.keys(d).length - 1]]);
+        const confirmedCases = d3.sum(stateConfirmed, d => +d[Object.keys(d)[Object.keys(d).length - 1]]);
+        const deaths = d3.sum(stateDeaths, d => +d[Object.keys(d)[Object.keys(d).length - 1]]);
         const recovered = 0; // Placeholder, as recovered data is not available
 
         const data = [
