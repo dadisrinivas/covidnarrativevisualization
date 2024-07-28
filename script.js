@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
+	console.log('effort 1');
     const scenes = [createScene1, createScene2, createScene3];
     let currentSceneIndex = 0;
 
